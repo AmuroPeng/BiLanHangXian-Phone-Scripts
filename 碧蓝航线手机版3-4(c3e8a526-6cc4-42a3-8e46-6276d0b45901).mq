@@ -137,35 +137,27 @@ TracePrint "新的一个本开始啦~"
 TracePrint "点击3-4"
 Delay 1500
 Tap 543,994
-Delay 1000
+Delay 100
 Tap 543,994
-Delay 1000
+Delay 100
 Tap 543,994
-Delay 1000
+Delay 100
 Tap 543, 994
-Delay 3000
-Tap 543, 994
-Delay 3000
-Tap 543, 994
-Delay 3000
-Tap 543, 994
-Delay 3000
-Tap 543, 994
-Delay 3000
+Delay 1500
 TracePrint"点击 立刻前往"
 Tap 727, 524
-Delay 1000
+Delay 100
 Tap 727, 524
-Delay 1000
+Delay 100
 Tap 727, 524
-Delay 1000
+Delay 100
 TracePrint"点击 选择阵容"
 Tap 850, 519
-Delay 1000
+Delay 100
 Tap 850, 519
-Delay 1000
+Delay 100
 Tap 850, 519
-Delay 1000
+Delay 100
 TracePrint "已进本"
 Delay 5000
 '==========以上是按键精灵录制的内容==========
