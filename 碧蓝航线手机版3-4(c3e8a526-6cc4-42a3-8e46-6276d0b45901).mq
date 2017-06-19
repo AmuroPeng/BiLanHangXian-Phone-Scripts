@@ -1,0 +1,220 @@
+Rem 开始
+Call 进本()
+Dim count=0'记录刷小怪的次数
+Dim intX ,intY
+Dim GetColor
+
+Rem rankD
+If count = 3 or count>3 Then 
+	Goto rankBoss
+End If
+'FindPic 553, 411, 663, 778,"Attachment:\Lv.bmp",0.3,intX,intY
+FindColor 403,957,1006,1168,"46BDEC",4,0.9,intX,intY
+If intX > -1 And intY > -1 Then
+count = count + 1
+TracePrint "这是第"&count&"次"
+TracePrint "在" & intX & ", " & intY
+'MoveR 140, 120'坐标有偏移,不知道为啥,这样就修正了..
+Delay 100
+Tap intX, intY
+Delay 500
+TracePrint "发现D列有小怪"
+Call 走起(intX,intY)
+Else 
+TracePrint "D列没有小怪"
+End If
+
+Rem rankE
+If count = 3 or count>3 Then 
+	Goto rankBoss
+End If
+FindColor 408,760,970,958,"46BDEC",4,0.9,intX,intY
+If intX > -1 And intY > -1 Then
+count = count + 1
+TracePrint "这是第"&count&"次"
+TracePrint "在" & intX & ", " & intY
+'MoveR 140, 120'坐标有偏移,不知道为啥,这样就修正了..
+Delay 100
+Tap intX, intY
+Delay 500
+TracePrint "发现E列有小怪"
+Call 走起(intX,intY)
+Else 
+TracePrint "E列没有小怪"
+End If
+
+Rem rankFG
+If count = 3 or count>3 Then 
+	Goto rankBoss
+End If
+FindColor 406,364,921,529,"46BDEC",4,0.9,intX,intY
+If intX > -1 And intY > -1 Then
+count = count + 1
+TracePrint "这是第"&count&"次"
+TracePrint "在" & intX & ", " & intY
+'MoveR 140, 120'坐标有偏移,不知道为啥,这样就修正了..
+Delay 100
+Tap intX, intY
+Delay 500
+TracePrint "发现F和G列有小怪"
+
+Call 走起(intX,intY)
+Else 
+TracePrint "F和G列没有小怪"
+TracePrint "回到D列"
+Goto rankD
+End If
+
+Rem rankBoss
+If count < 3 Then 
+	Goto rankD
+End If
+TracePrint "已打完"&count&"个小怪,开始boss关"
+Call 维修()
+FindColor 608,101,928,319,"46BDEC",4,0.9,intX,intY
+If intX > -1 And intY > -1 Then
+count = count + 1
+TracePrint "这是第"&count&"次"
+TracePrint "在" & intX & ", " & intY
+'MoveR 140, 120'坐标有偏移,不知道为啥,这样就修正了..
+Delay 100
+Tap intX, intY
+Delay 500
+TracePrint "发现boss啦"
+Call 走起(intX,intY)
+Goto rankBoss
+Else 
+Goto 开始
+End If
+
+
+
+
+
+
+
+Function 走起(intX,intY)
+'==========以下是按键精灵录制的内容==========
+Rem 点目标位置
+Delay 100
+Tap intX,intY
+Delay 1
+Tap intX,intY
+Delay 1
+Tap intX,intY
+
+GetColor=GetPixelColor(676,1559)
+ 	If GetColor = "217552" Then 
+ 		TracePrint "遭遇伏击正在规避QAQ"
+ 		Tap 578, 601
+ 		Delay 1000
+ 	End If
+Delay 500
+'==========以上是按键精灵录制的内容==========
+GetColor=GetPixelColor(216,534)
+If GetColor = "BDBABD" Then 
+TracePrint "出击!!!"
+	Call 出击()
+	Delay 5000
+Else 
+TracePrint "还没检测到出击界面"
+	Goto 点目标位置
+End If
+End Function
+
+
+
+
+'备份/录制
+'D1-D4	左上角538,359  7A5D20	右下角663,778  080401
+'Lv的标  AADCDD
+'出击 1082,714  B26279
+
+Function 进本
+'==========以下是按键精灵录制的内容==========
+'进本543,994
+TracePrint "新的一个本开始啦~"
+TracePrint "点击3-4"
+Delay 1500
+Tap 543,994
+Delay 1000
+Tap 543,994
+Delay 1000
+Tap 543,994
+Delay 1000
+Tap 543, 994
+Delay 3000
+Tap 543, 994
+Delay 3000
+Tap 543, 994
+Delay 3000
+Tap 543, 994
+Delay 3000
+Tap 543, 994
+Delay 3000
+TracePrint"点击 立刻前往"
+Tap 727, 524
+Delay 1000
+Tap 727, 524
+Delay 1000
+Tap 727, 524
+Delay 1000
+TracePrint"点击 选择阵容"
+Tap 850, 519
+Delay 1000
+Tap 850, 519
+Delay 1000
+Tap 850, 519
+Delay 1000
+TracePrint "已进本"
+Delay 5000
+'==========以上是按键精灵录制的内容==========
+End Function
+
+Function 出击
+Dim 时间
+时间=0
+Rem 出击start
+	Tap 958,271'出击按钮已避开技能键
+	Delay 500
+	时间=时间+0.5
+	'TracePrint "打怪中....已进行"&时间&"秒"
+	GetColor=GetPixelColor(39,277)
+ 	If GetColor = "6B45F7" Then 
+ 		TracePrint "这关小怪打完啦,耗时"&时间&"秒"
+ 		Goto 出击over
+ 	Else 
+ 		Goto 出击start
+ 	End If
+
+
+	Rem 出击over
+End Function
+
+Function 维修()
+	Tap 475,20'点开维修菜单
+	Delay 800
+	Rem 维修工具
+	GetColor = GetPixelColor(581,59)
+	If GetColor = "9C968C" Then '有维修工具时,工具图标背景颜色更深
+ 	Tap 535, 70'点维修工具
+ 	Delay 150
+ 	TracePrint "使用紧急维修"
+ 	Tap 703,789'点击确定使用
+ 	Delay 200
+ 	GetColor = GetPixelColor(281,528)'是否使用光维修工具或全员满血
+	If GetColor = "42D7FF" Then '是
+ 	Tap 281,528'关掉小窗口
+ 	TracePrint "已使用光维修工具或全员满血,继续攻略boss啦"
+ 	Delay 100
+ 	Else '修复了
+ 	TracePrint"发现仍有剩余维修工具,继续使用"
+ 	Goto 维修工具
+ 	End If
+ 	Else '走这条说明没有维修工具
+ 	TracePrint "未发现维修工具"
+ 	Tap 471,304'关掉维修菜单
+ 	End If
+ 	
+Delay 500
+End Function
