@@ -47,7 +47,7 @@ Rem rankFG
 If count = 3 or count>3 Then 
 	Goto rankBoss
 End If
-FindColor 406,364,921,529,"46BDEC",4,0.9,intX,intY
+FindColor 638,327,995,763,"46BDEC",4,0.9,intX,intY
 If intX > -1 And intY > -1 Then
 count = count + 1
 TracePrint "这是第"&count&"次"
@@ -201,6 +201,7 @@ Function 维修()
  	Delay 100
  	Else '修复了
  	TracePrint"发现仍有剩余维修工具,继续使用"
+ 	Delay 500
  	Goto 维修工具
  	End If
  	Else '走这条说明没有维修工具
