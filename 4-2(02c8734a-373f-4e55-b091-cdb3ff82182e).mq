@@ -8,62 +8,95 @@ Dim GetColor
 Dim offset
 Randomize
 offset = Int((2+2+1) * Rnd() -2)
-TracePrint "偏移量为"&offset
+'TracePrint "偏移量为"&offset
 
-//Rem rankGift
+Rem Scan
+Delay 2000
 //If count = 3 or count>3 Then 
-//	Goto rankBoss
-//End If
-//FindColor 727,373,870,457,"F7FF94",4,0.9,intX,intY
-//If intX > -1 And intY > -1 Then 
-//	TracePrint "发现有'?'"
-//	Delay 500
-//	Call 走起(897, 435)
-//	count = count + 1
-//	TracePrint "这是第"&count&"次"
-//	Goto rankGift
-//Else 
-//	TracePrint "'?'已刷完"
-//	count = count - 1
+//	Goto Boss
 //End If
 
-Rem rankAll
-If count = 3 or count>3 Then 
-	Goto rankBoss
-End If
-FindColor 237,268,974,1194,"4ADFFF",4,0.9,intX,intY'46BDEC
-If intX > -1 And intY > -1 Then 
-TracePrint "发现有小怪,在" & intX & ", " & intY
-Delay 500
-Call 走起(intX, intY)
-count = count + 1
-TracePrint "这是第"&count&"次"
-Goto rankAll
-Else 
-TracePrint "没有发现小怪,GG!"
-'回头写点什么else不能空着啊
-Goto rankAll
-End If
-
-Rem rankBoss
-TracePrint "已打完"&count&"个小怪,开始boss关"
-Call 维修()
-Delay 100
-FindColor 503,264,668,517,"4A4DF7",1,0.9,intX,intY
+//检查boss
+FindMultiColor 546,312,676,497, "31283A", "-5|-28|524DFF,-6|25|4A4DF7", 1, 0.9, intX, intY'
+'FindColor 546,312,676,497, "4A4DF7", 1, 0.9, intX, intY'F4
 If intX > -1 And intY > -1 Then
-TracePrint "发现boss啦"
+TracePrint "发现boss啦,在F4:"&intX&","&intY
+Goto AttackBoss
+Else 
+	FindMultiColor 827,700,970,888, "31283A", "-5|-28|524DFF,-6|25|4A4DF7,-55|-32|292429", 1, 0.9, intX, intY
+	'FindColor 827,700,970,888, "4A4DF7", 1, 0.9, intX, intY'D6
+		If intX > -1 And intY > -1 Then
+			TracePrint "发现boss啦,在D6:"&intX&","&intY
+			Goto AttackBoss
+		Else 	
+			TracePrint "未检测到boss,继续打小怪"'messageshow
+			Goto 小怪
+		End If
+End If
+
+Rem AttackBoss
+Call 维修()
 Dim 出本
 出本 = 走起(intX, intY)
 count = count + 1
 	If 出本 = 1 Then 
 		Goto 开始
 		Else 
-		Goto rankBoss
+		Goto Scan
 	End If
+
+Rem 小怪
+//找小怪
+//                                    		1		2			3				4			5			6				7		  	8
+FindMultiColor 237, 327, 974, 1194, "42BAEF", "5|10|FFFFFF", 2, 0.9, intX, intY',-50|-50|847D7B,-85|44|F7EFF7
+'FindColor 237,268,974,1194,"847D84",4,0.9,intX,intY'46BDEC,4ADFFF
+If intX > -1 And intY > -1 Then 
+	TracePrint "发现有小怪<轻巡>,在" & intX & ", " & intY
+	Goto 有怪之后
 Else 
-	TracePrint "未知逻辑:已打完3个小怪但为检测到boss"'messageshow
-	Goto rankAll
+	FindMultiColor 237, 327, 974, 1194, "CEFBFF", "31|0|42D7FF,21|78|EFF3F7", 2, 0.9, intX, intY',-57|-47|3114B5,-141|-51|635963
+	'FindColor 237,268,974,1194,"847D84",4,0.9,intX,intY'46BDEC,4ADFFF
+	If intX > -1 And intY > -1 Then 
+		TracePrint "发现有小怪<航母>,在" & intX & ", " & intY
+		Goto 有怪之后
+	Else 
+		TracePrint "没发现有怪,GG"
+		EndScript
+	End If
 End If
+Rem 有怪之后 
+Delay 500
+Call 走起(intX, intY)
+count = count + 1
+TracePrint "这是第"&count&"次"
+Delay 3500
+Goto Scan
+//Else 
+//TracePrint "没有发现小怪,GG!"
+//'回头写点什么else不能空着啊
+//Goto Scan
+//End If
+
+//Rem Boss
+//TracePrint "已打完"&count&"个小怪,开始boss关"
+//Call 维修()
+//Delay 100
+//FindColor 503,264,668,517,"4A4DF7",1,0.9,intX,intY
+//If intX > -1 And intY > -1 Then
+//TracePrint "发现boss啦,在"&intX&","&intY
+//Call 维修()
+//Dim 出本
+//出本 = 走起(intX, intY)
+//count = count + 1
+//	If 出本 = 1 Then 
+//		Goto 开始
+//		Else 
+//		Goto Boss
+//	End If
+//Else 
+//	TracePrint "未知逻辑:已打完3个小怪但为检测到boss"'messageshow
+//	Goto rallCrazy
+//End If
 
 
 Function 走起(intX,intY)
@@ -81,7 +114,8 @@ GetColor=GetPixelColor(216,534)
 	Else 
 		Dim intXX
 		Dim intYY
-		FindColor 779,399,870,412,"F7FF94",4,0.9,intXX,intYY'点'?'一下
+		FindMultiColor 722,319,839,390,"EFFF8C","-30|0|EFFF94,-80|0|EFFF7B",4,0.9,intXX,intYY
+		'FindColor 727,373,870,457,"F7FF94",4,0.9,intXX,intYY'点'?'一下
 		'光辉没有蓝色区域 779,399,870,412
 		'本应检测区域:727,373,870,457
 			If intXX > -1 And intYY > -1 Then 
@@ -95,9 +129,10 @@ GetColor=GetPixelColor(216,534)
 			Else 
 				Randomize
 				offset = Int((2+2+1) * Rnd() -2)
-				TracePrint "偏移量为"&offset
+				'TracePrint "偏移量为"&offset
 				Delay 100
 				Tap intX + offset, intY - offset
+				TracePrint "正在点 "&intX&","&intY
 			End If
 			GetColor=GetPixelColor(534,831)
  			If GetColor = "08419C" Then 
@@ -115,11 +150,11 @@ End Function
 Function 进本
 TracePrint "[进入Function:进本]"
 '进本717,1270
-TracePrint "点击3-4"
+TracePrint "点击4-2"
 Dim offset
 Randomize
 offset = Int((2+2+1) * Rnd() -2)
-TracePrint "偏移量为"&offset
+'TracePrint "偏移量为"&offset
 Delay 1500
 Tap 717+offset,1270-offset
 Delay 100
@@ -132,7 +167,7 @@ TracePrint"点击 选择阵容"'850,515
 Tap 850+offset, 519-offset
 Delay 1000
 TracePrint "已进本"
-Delay 5000
+Delay 3000
 '==========以上是按键精灵录制的内容==========
 TracePrint "[结束Function:进本]"
 End Function
@@ -148,20 +183,32 @@ Rem 出击start
 	'TracePrint "偏移量为"&offset
 	Tap 958+offset,271-offset'出击按钮已避开技能键
 	Delay 500
-	时间=时间+0.5
-	GetColor=GetPixelColor(1005,219)'39,277
- 	If GetColor = "F7FBF7" Then 'E6EFEF
- 		TracePrint "这关小怪打完啦,耗时"&时间&"秒"
- 		TracePrint "[结束Function:出击]"
- 		Exit Function
+	时间 = 时间 + 0.5
+
+	FindMultiColor 883,128,1053,294, "94A6F7", "0|6|D6E3FF,0|10|945D4A,10|58|8CDFFF,0|58|2124EF", 1, 0.9, intX, intY
+ 	'GetColor=GetPixelColor(908,545)'判断是否完全打完
+	'If GetColor = "4249A4" Then 
+	If intX > -1 And intY > -1 Then 
+		//贴个补丁,这尼玛战斗结束画面会识别成结束也是醉了,所以再多检查个像素点了就
+		Dim rColor
+		rColor = GetPixelColor(1005, 1646)
+		If rColor = "1910CE" Then 
+			Dim t2
+			t2 = Time()
+ 			TracePrint "整个副本打完啦,总耗时"&int((t2-t1)/60)&"分钟"'&(t2-t1)Mod60&"秒"
+ 			出击 = 1
+ 			Exit Function
+ 		Else 
+ 		Goto 出击start
+		End If
  	Else 
- 	 	GetColor=GetPixelColor(908,545)'判断是否完全打完
-		If GetColor = "4249A4" Then 
-		Dim t2
-		t2 = Time()
- 		TracePrint "整个副本打完啦,总耗时"&int((t2-t1)/60)&"分钟"'&(t2-t1)Mod60&"秒"
- 		出击 = 1
- 		Exit Function
+		FindMultiColor 890,9,1066,937, "1975CE", "20|0|EFEFEF,0|220|4A4D4A,20|220|F7FBF7,20|670|0804BD,30|670|FFFFFF", 1, 0.9, intX, intY
+			If intX > -1 And intY > -1 Then 	
+			'GetColor=GetPixelColor(1005,219)'39,277
+ 			'If GetColor = "F7FBF7" Then 'E6EFEF
+ 			TracePrint "这关小怪打完啦,耗时"&时间&"秒"
+ 			TracePrint "[结束Function:出击]"
+ 			Exit Function
  		Else
  		Goto 出击start
  		End If
@@ -173,7 +220,7 @@ TracePrint "[进入Function:维修]"
 	Dim offset
 	Randomize
 	offset = Int((2+2+1) * Rnd() -2)
-	TracePrint "偏移量为"&offset
+	'TracePrint "偏移量为"&offset	
 	Tap 475+offset,20-offset'点开维修菜单
 	Delay 800
 	Rem 维修工具
