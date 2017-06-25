@@ -6,6 +6,7 @@ Dim count=-1'记录刷小怪的次数
 Dim intX ,intY
 Dim GetColor
 Dim offset
+Dim 出本
 Randomize
 offset = Int((2+2+1) * Rnd() -2)
 'TracePrint "偏移量为"&offset
@@ -36,7 +37,6 @@ End If
 
 Rem AttackBoss
 Call 维修()
-Dim 出本
 出本 = 走起(intX, intY)
 count = count + 1
 	If 出本 = 1 Then 
@@ -54,7 +54,7 @@ If intX > -1 And intY > -1 Then
 	TracePrint "发现有小怪<轻巡>,在" & intX & ", " & intY
 	Goto 有怪之后
 Else 
-	FindMultiColor 237, 327, 974, 1194, "CEFBFF", "31|0|42D7FF,21|78|EFF3F7", 2, 0.9, intX, intY',-57|-47|3114B5,-141|-51|635963
+	FindMultiColor 237, 327, 974, 1194, "CECECE", "20|0|B5E7F7,-100|0|5A5552,10|70|6B656B", 2, 0.9, intX, intY
 	'FindColor 237,268,974,1194,"847D84",4,0.9,intX,intY'46BDEC,4ADFFF
 	If intX > -1 And intY > -1 Then 
 		TracePrint "发现有小怪<航母>,在" & intX & ", " & intY
@@ -66,38 +66,14 @@ Else
 End If
 Rem 有怪之后 
 Delay 500
-Call 走起(intX, intY)
+出本 = 走起(intX, intY)
+	If 出本 = 1 Then 
+		Goto 开始
+	End If
 count = count + 1
 TracePrint "这是第"&count&"次"
 Delay 3500
 Goto Scan
-//Else 
-//TracePrint "没有发现小怪,GG!"
-//'回头写点什么else不能空着啊
-//Goto Scan
-//End If
-
-//Rem Boss
-//TracePrint "已打完"&count&"个小怪,开始boss关"
-//Call 维修()
-//Delay 100
-//FindColor 503,264,668,517,"4A4DF7",1,0.9,intX,intY
-//If intX > -1 And intY > -1 Then
-//TracePrint "发现boss啦,在"&intX&","&intY
-//Call 维修()
-//Dim 出本
-//出本 = 走起(intX, intY)
-//count = count + 1
-//	If 出本 = 1 Then 
-//		Goto 开始
-//		Else 
-//		Goto Boss
-//	End If
-//Else 
-//	TracePrint "未知逻辑:已打完3个小怪但为检测到boss"'messageshow
-//	Goto rallCrazy
-//End If
-
 
 Function 走起(intX,intY)
 '==========以下是按键精灵录制的内容==========
@@ -185,35 +161,32 @@ Rem 出击start
 	Delay 500
 	时间 = 时间 + 0.5
 
-	FindMultiColor 883,128,1053,294, "94A6F7", "0|6|D6E3FF,0|10|945D4A,10|58|8CDFFF,0|58|2124EF", 1, 0.9, intX, intY
- 	'GetColor=GetPixelColor(908,545)'判断是否完全打完
-	'If GetColor = "4249A4" Then 
-	If intX > -1 And intY > -1 Then 
-		//贴个补丁,这尼玛战斗结束画面会识别成结束也是醉了,所以再多检查个像素点了就
-		Dim rColor
-		rColor = GetPixelColor(1005, 1646)
-		If rColor = "1910CE" Then 
-			Dim t2
-			t2 = Time()
- 			TracePrint "整个副本打完啦,总耗时"&int((t2-t1)/60)&"分钟"'&(t2-t1)Mod60&"秒"
- 			出击 = 1
- 			Exit Function
+	FindMultiColor 890,9,1066,937, "1975CE", "20|0|EFEFEF,0|220|4A4D4A,20|220|F7FBF7,20|670|0804BD,30|670|FFFFFF", 1, 0.9, intX, intY
+		If intX > -1 And intY > -1 Then 	
+		'GetColor=GetPixelColor(1005,219)'39,277
+ 		'If GetColor = "F7FBF7" Then 'E6EFEF
+ 		
+ 			Delay 3000
+ 			
+ 			FindMultiColor 466,17,1075,891, "4255CE", "0|330|F7FBF7,0|530|E6C2B5,-470|-100|E6E7E6,-200|500|009AEF", 1, 0.8, intX, intY
+ 			'GetColor=GetPixelColor(908,545)'判断是否完全打完
+			'If GetColor = "4249A4" Then 
+			If intX > -1 And intY > -1 Then 
+				Dim t2
+				t2 = Time()
+ 				TracePrint "整个副本打完啦,总耗时"&int((t2-t1)/60)&"分钟"'&(t2-t1)Mod60&"秒"
+ 				出击 = 1
+ 				Exit Function
+ 			Else
+ 				TracePrint "这关小怪打完啦,耗时"&时间&"秒"
+ 				TracePrint "[结束Function:出击]"
+ 				Exit Function
+ 			End If
  		Else 
- 		Goto 出击start
-		End If
- 	Else 
-		FindMultiColor 890,9,1066,937, "1975CE", "20|0|EFEFEF,0|220|4A4D4A,20|220|F7FBF7,20|670|0804BD,30|670|FFFFFF", 1, 0.9, intX, intY
-			If intX > -1 And intY > -1 Then 	
-			'GetColor=GetPixelColor(1005,219)'39,277
- 			'If GetColor = "F7FBF7" Then 'E6EFEF
- 			TracePrint "这关小怪打完啦,耗时"&时间&"秒"
- 			TracePrint "[结束Function:出击]"
- 			Exit Function
- 		Else
- 		Goto 出击start
+ 			Goto 出击start
  		End If
- 	End If
 End Function
+
 
 Function 维修()
 TracePrint "[进入Function:维修]"
@@ -225,14 +198,15 @@ TracePrint "[进入Function:维修]"
 	Delay 800
 	Rem 维修工具
 	GetColor = GetPixelColor(581,59)
-	If GetColor = "9C968C" Then '有维修工具时,工具图标背景颜色更深
+	If GetColor = "949694" Then '有维修工具时,工具图标背景颜色更深 3-4是9C968C
  	Tap 535+offset, 70-offset'点维修工具
  	Delay 150
  	TracePrint "使用紧急维修"
  	Tap 703+offset,789-offset'点击确定使用
  	Delay 200
- 	GetColor = GetPixelColor(281,528)'是否使用光维修工具或全员满血
-	If GetColor = "42D7FF" Then '是
+ 	GetColor = GetPixelColor(568,35)'是否使用光维修工具或全员满血
+	If GetColor = "BDBABD" Then '是
+	//还有几个坐标可供选择:572,41 BDBABD	571,33 B5B6B5	585,35 ADB6AD
  	Tap 281+offset,528-offset'关掉小窗口
  	TracePrint "已使用光维修工具或全员满血,继续攻略boss啦"
  	Delay 100
