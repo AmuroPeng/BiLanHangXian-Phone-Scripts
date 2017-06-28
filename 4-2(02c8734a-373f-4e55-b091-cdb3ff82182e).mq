@@ -168,7 +168,7 @@ Rem 出击start
  		
  			Delay 3000
  			
- 			FindMultiColor 466,17,1075,891, "4255CE", "0|330|F7FBF7,0|530|E6C2B5,-470|-100|E6E7E6,-200|500|009AEF", 1, 0.8, intX, intY
+ 			FindMultiColor 466,17,1075,891, "4255CE", "0|330|F7FBF7,0|530|E6C2B5,-470|-100|E6E7E6,-200|500|009AEF", 1, 0.9, intX, intY
  			'GetColor=GetPixelColor(908,545)'判断是否完全打完
 			'If GetColor = "4249A4" Then 
 			If intX > -1 And intY > -1 Then 
