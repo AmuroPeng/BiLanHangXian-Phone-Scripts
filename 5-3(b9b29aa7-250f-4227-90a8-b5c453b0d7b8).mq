@@ -81,7 +81,7 @@ Delay 500
 		offset = Int((5+5+1) * Rnd() -5)
 		Tap 932 + offset, 669 - offset' 932,669
 		TracePrint "切换到2队"
-		Call 维修()
+		//Call 维修()
 		Goto AttackBoss
 	End If
 offset = Int((500 + 1 + 1) * Rnd() - 1)
@@ -112,8 +112,10 @@ If GetColor = "EEFCFF" Then
  		Goto 出击start
  	End If
 Else 
-	GetColor=GetPixelColor(879,377)
- 	If GetColor = "FFFFFF" Then 
+	'GetColor=GetPixelColor(879,377)
+ 	'If GetColor = "FFFFFF" Then 
+ 	FindMultiColor 464,306,1058,434, "35C8FB", "210|0|FFFFFF,80|0|38271B,-360,0|6F6061,-277|0|0347FF", 1, 0.9, intX, intY
+	If intX > -1 And intY > -1 Then 	
  		TracePrint "遭遇伏击正在规避QAQ"
  		offset = Int((5+5+1) * Rnd() -5)
  		Tap 879 + offset, 377 - offset
@@ -137,7 +139,7 @@ If GetColor="2321D7" Then
  	Goto 开始
 Else 
 	TracePrint "整个本还未结束,继续打boss"
-	Goto Scan
+	Goto AttackBoss//!!!!!!!!!!!!改了这里看看怎么样
 End If
 
 
