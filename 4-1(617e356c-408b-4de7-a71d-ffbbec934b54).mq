@@ -263,28 +263,28 @@ TracePrint "[进入Function:出击]"
 Dim 时间
 时间 = 0
 Rem 出击start
-	offset = Int((5+5+1) * Rnd() -5)
-	Tap 1098+offset,635-offset'出击按钮已避开技能键 1098,635
-	offset = Int((500 + 1 + 1) * Rnd() - 1)
-	Delay offset
-	Delay 500
-	时间 = 时间 + 0.5 + offset*0.001
-
-//	//判断是否开启了自律 方法:看"自"字右边的那个竖颜色
-//	'FindMultiColor 119,40,142,66, "FFFFFF", "0|1|FFFFFF,0|-1|FFFFFF,1|0|FFFFFF,-1|0|FFFFFF", 1, 0.9, intX, intY
-//	'If intX > -1 And intY > -1 Then 
-//	GetColor = GetPixelColor(176,48)
-//	If GetColor = "5E5C50"or"594F46" Then 
-//	TracePrint "开始自律"
-//	offset = Int((5+5+1) * Rnd() -5)
-//	Tap 132+offset,49-offset '自律战斗AUTO
-//	End If
-
-	//判断一个小怪打完没有 方法:看右下角的撤退应敌等颜色
-	FindMultiColor 650,623,1225,705, "1712CA", "100|0|F7FBFB,300|0|0E3B6A,300|-20|1072D6", 1, 0.9, intX, intY
+	While GetColor <> "DFDD9E"'点出击
+		GetColor = GetPixelColor(929, 648)
+		TracePrint "点击出击"
+		offset = Int((5 + 5 + 1) * Rnd() - 5)
+ 		Tap 1098+offset,635-offset
+		offset = Int((500 + 1 + 1) * Rnd() - 1)
+		Delay offset
+		Delay 500
+	Wend
+	While GetColor <> "41D75D"
+		GetColor = GetPixelColor(253,479)
+		offset = Int((500 + 1 + 1) * Rnd() - 1)
+		Delay offset
+		Delay 500
+		时间 = 时间 + 0.5 + offset*0.001
+	Wend
+	intX = -1
+	intY = -1
+	While intX < 0 And intY < 0
+		//判断一个小怪打完没有 方法:看右下角的撤退应敌等颜色
+		FindMultiColor 650,623,1225,705, "1712CA", "100|0|F7FBFB,300|0|0E3B6A,300|-20|1072D6", 1, 0.9, intX, intY
 		If intX > -1 And intY > -1 Then 	
-		'GetColor=GetPixelColor(1005,219)'39,277
- 		'If GetColor = "F7FBF7" Then 'E6EFEF
  			offset = Int((500 + 1 + 1) * Rnd() - 1)
 			Delay offset
  			Delay 3000
@@ -293,8 +293,14 @@ Rem 出击start
  				TracePrint "[结束Function:出击]"
  				Exit Function
  		Else 
- 			Goto 出击start
+ 			offset = Int((5 + 5 + 1) * Rnd() - 5)
+ 			Tap 1098+offset,635-offset
+			offset = Int((500 + 1 + 1) * Rnd() - 1)
+			Delay offset
+			Delay 500
+			TracePrint "等待出击结束"
  		End If
+	Wend
 End Function
 
 
