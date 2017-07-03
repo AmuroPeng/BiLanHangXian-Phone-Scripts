@@ -1,0 +1,420 @@
+//进本时点击的位置
+Dim startX=239
+Dim startY=306
+Dim 几次出现大怪=3
+Dim bossX=845
+Dim bossY=150
+Dim 关卡名称 = "4-1"
+Dim 小怪识别1 = "43DAFC"
+Dim 小怪识别2 = "9|0|162123,22|0|47CDEF,60|-5|44BBEE,0|-10|59C1EC"
+Dim 小怪识别3 = 7
+
+Rem 开始
+Dim t1
+t1 = Time()
+Call 进本(startX,startY)
+Dim count=0'记录刷小怪的次数
+Dim intX ,intY
+Dim GetColor
+Dim offset
+Dim 出本
+Randomize
+offset = Int((5+5+1) * Rnd() -5)
+'TracePrint "偏移量为"&offset
+
+Rem Scan
+offset = Int((500 + 1 + 1) * Rnd() - 1)
+Delay offset
+Delay 2000
+//If count = 3 or count>3 Then 
+//	Goto Boss
+//End If
+
+Rem 小怪
+//找小怪
+	offset = Int((1000 + 500 + 1) * Rnd() - 500)
+	Delay offset
+	FindMultiColor 276,109,1080,662, 小怪识别1, 小怪识别2, 小怪识别3, 0.8, intX, intY
+	If intX > -1 And intY > -1 Then 
+		TracePrint "发现有小怪,在" & intX & ", " & intY
+		Goto 有怪之后
+	Else 
+		TracePrint "没发现有怪,GG"
+				GetColor=GetPixelColor(1006,634)
+		If GetColor = "EEFCFF" Then 
+			TracePrint "出击!!!"
+			Rem 出击startt
+			offset = Int((5+5+1) * Rnd() -5)
+			Tap 1098+offset,635-offset'出击按钮已避开技能键 1098,635
+			offset = Int((500 + 1 + 1) * Rnd() - 1)
+			Delay offset
+			Delay 500
+			//判断一个小怪打完没有 方法:看右下角的撤退应敌等颜色
+			FindMultiColor 650,623,1225,705, "1712CA", "100|0|F7FBFB,300|0|0E3B6A,300|-20|1072D6", 1, 0.9, intX, intY
+			If intX > -1 And intY > -1 Then 	
+ 				offset = Int((500 + 1 + 1) * Rnd() - 1)
+				Delay offset
+ 				Delay 3000
+ 			Else 
+ 				Goto 出击startt
+ 			End If
+		Else 
+			GetColor=GetPixelColor(879,377)
+ 			If GetColor = "FFFFFF" Then 
+ 				TracePrint "遭遇伏击正在规避QAQ"
+ 				offset = Int((5+5+1) * Rnd() -5)
+ 				Tap 879+offset, 377-offset
+ 			End If
+			Goto 小怪
+		End If
+	End If
+
+
+
+
+
+
+//					End If
+Rem 有怪之后
+offset = Int((500 + 1 + 1) * Rnd() - 1)
+Delay offset
+Delay 500
+走起 (intX, intY)
+//	If count = 2 Then 
+//		offset = Int((500+5+1) * Rnd() -5)
+//		Delay 1500+offset
+//		Call 维修()
+//	End If
+	If count = 几次出现大怪 Then //该去打boss了
+		offset = Int((500+5+1) * Rnd() -5)
+		Delay 1000+offset
+		offset = Int((5 + 5 + 1) * Rnd() - 5)
+//--------------有没有必要-切换到2队-------------------
+//		Tap 932 + offset, 669 - offset' 932,669
+//		TracePrint "切换到2队"
+//--------------有没有必要-切换到2队-------------------
+		//Call 维修()
+		Goto AttackBoss
+	End If
+offset = Int((500 + 1 + 1) * Rnd() - 1)
+Delay offset	
+Delay 3500
+Goto Scan
+
+
+Rem AttackBoss
+//走起+出击
+
+//===========自动刷boos时保留,否则删掉===========
+	offset = Int((500 + 1 + 1) * Rnd() - 1)
+	Delay offset + 500
+//	Tap bossX, bossY
+	FindBoss()
+	offset = Int((500 + 1 + 1) * Rnd() - 1)
+	Delay offset + 1000
+//===========自动刷boos时保留,否则删掉===========
+
+ 	FindMultiColor 911,577,1191,684, "ECE8C0", "70|0|BB99AA,145|0|7DC7FD", 1, 0.9, intX, intY
+	If intX > -1 And intY > -1 Then 
+	TracePrint "出击!!!"
+	Rem 出击start
+	offset = Int((5+5+1) * Rnd() -5)
+	Tap 1098+offset,635-offset'出击按钮已避开技能键 1098,635
+	offset = Int((500 + 1 + 1) * Rnd() - 1)
+	Delay offset
+	Delay 500
+	
+	'判断是否完全打完
+	offset = Int((500 + 1 + 1) * Rnd() - 1)
+	Delay offset
+	Delay 5000
+	GetColor = GetPixelColor(1136,676)
+	If GetColor="FBFBFB" Then 
+		Dim t2
+		t2 = Time()
+ 		TracePrint "整个副本打完啦,总耗时"&int((t2-t1)/60)&"分钟"'&(t2-t1)Mod60&"秒"
+ 		Goto 开始
+    Else 
+    	TracePrint "副本没结束"
+	End If
+	
+	//判断一个小怪打完没有 方法:看右下角的撤退应敌等颜色
+	FindMultiColor 650,623,1225,705, "1712CA", "100|0|F7FBFB,300|0|0E3B6A,300|-20|1072D6", 1, 0.9, intX, intY
+	If intX > -1 And intY > -1 Then 
+		count = count+1
+ 		offset = Int((500 + 1 + 1) * Rnd() - 1)
+		Delay offset
+ 		Delay 3000
+ 		Goto AttackBoss
+ 	Else 
+ 		Goto 出击start
+ 	End If
+Else 
+	GetColor=GetPixelColor(879,377)
+ 	If GetColor = "FFFFFF" Then 
+ 	'FindMultiColor 464,306,1058,434, "35C8FB", "210|0|FFFFFF,80|0|38271B,-360,0|6F6061,-277|0|0347FF", 1, 0.9, intX, intY
+	'If intX > -1 And intY > -1 Then 	
+ 		TracePrint "遭遇伏击正在规避QAQ"
+ 		offset = Int((5+5+1) * Rnd() -5)
+ 		Tap 879 + offset, 377 - offset
+ 		offset = Int((500 + 1 + 1) * Rnd() - 1)
+ 		Delay 500+offset
+ 	End If
+	Goto AttackBoss
+End If
+
+
+
+
+
+
+Function 走起(intX,intY)
+'==========以下是按键精灵录制的内容==========
+TracePrint "[进入Function:走起]"
+Dim offset
+Rem 点目标位置
+
+GetColor=GetPixelColor(1006,634)
+	If GetColor = "EEFCFF" Then 
+		TracePrint "出击!!!"
+		出击()
+		TracePrint "[结束Function:走起]"
+		Exit Function
+	Else 
+		Dim intXX
+		Dim intYY
+		FindMultiColor 556,187,675,318,"F6FF91","8|0|212027,0|-20|F5FF96",4,0.9,intXX,intYY
+		'检测区域:553,197,674,304
+			If intXX > -1 And intYY > -1 Then 
+				TracePrint "发现有'?',检测到" &intXX&","&intYY&"处符合"
+				offset = Int((500 + 1 + 1) * Rnd() - 1)
+				Delay offset
+				Delay 500
+				Randomize
+				offset = Int((5+5+1) * Rnd() -5)
+				Tap 616+offset,321-offset' 616,321
+	 	
+			Else 
+				Randomize
+				'TracePrint "偏移量为"&offset
+				offset = Int((500 + 1 + 1) * Rnd() - 1)
+				Delay offset
+				Delay 100
+				offset = Int((5+5+1) * Rnd() -5)
+				Tap intX + offset, intY - offset
+				TracePrint "正在点 "&intX&","&intY
+			End If
+			GetColor=GetPixelColor(879,377)
+ 			If GetColor = "FFFFFF" Then 
+ 				TracePrint "遭遇伏击正在规避QAQ"
+ 				offset = Int((5+5+1) * Rnd() -5)
+ 				Tap 879+offset, 377-offset
+ 			End If
+		
+		offset = Int((500 + 1 + 1) * Rnd() - 1)
+		Delay offset
+		Delay 3000
+		TracePrint "还没检测到出击界面"
+		Goto 点目标位置
+	End If
+
+End Function
+
+Function 进本(startX, startY)
+	//判断一个小怪打完没有 方法:看右下角的撤退应敌等颜色
+	FindMultiColor 650,623,1225,705, "1712CA", "100|0|F7FBFB,300|0|0E3B6A,300|-20|1072D6", 1, 0.9, intX, intY
+		If intX > -1 And intY > -1 Then 
+		TracePrint "居然!已经在本里,那直接开始打"
+		Exit Function'调试用,如果已经进本就不点本了..
+		End If
+	TracePrint "[进入Function:进本]"
+	TracePrint "点击"&关卡名称
+	Dim offset
+	Randomize
+	'TracePrint "偏移量为"&offset
+	offset = Int((500 + 1 + 1) * Rnd() - 1)
+	Delay offset
+	Delay 1500
+	'进本 坐标在主函数一开始修改
+	offset = Int((5+5+1) * Rnd() -5)
+	Tap startX+offset,startY-offset
+	offset = Int((500 + 1 + 1) * Rnd() - 1)
+	Delay offset
+	Delay 1000
+	TracePrint"点击 立刻前往"' 924,487
+	offset = Int((5+5+1) * Rnd() -5)
+	Tap 924+offset, 487-offset
+	offset = Int((500 + 1 + 1) * Rnd() - 1)
+	Delay offset
+	Delay 1000
+	TracePrint"点击 选择阵容"' 931,563
+	offset = Int((5+5+1) * Rnd() -5)
+	Tap 931+offset, 563-offset
+	offset = Int((500 + 1 + 1) * Rnd() - 1)
+	Delay offset
+	TracePrint "已进本"
+	Delay 3000
+	'==========以上是按键精灵录制的内容==========
+	TracePrint "[结束Function:进本]"
+End Function
+
+Function 出击()
+TracePrint "[进入Function:出击]"
+Dim 时间
+时间 = 0
+Rem 出击start
+	offset = Int((5+5+1) * Rnd() -5)
+	Tap 1098+offset,635-offset'出击按钮已避开技能键 1098,635
+	offset = Int((500 + 1 + 1) * Rnd() - 1)
+	Delay offset
+	Delay 500
+	时间 = 时间 + 0.5 + offset*0.001
+
+//	//判断是否开启了自律 方法:看"自"字右边的那个竖颜色
+//	'FindMultiColor 119,40,142,66, "FFFFFF", "0|1|FFFFFF,0|-1|FFFFFF,1|0|FFFFFF,-1|0|FFFFFF", 1, 0.9, intX, intY
+//	'If intX > -1 And intY > -1 Then 
+//	GetColor = GetPixelColor(176,48)
+//	If GetColor = "5E5C50"or"594F46" Then 
+//	TracePrint "开始自律"
+//	offset = Int((5+5+1) * Rnd() -5)
+//	Tap 132+offset,49-offset '自律战斗AUTO
+//	End If
+
+	//判断一个小怪打完没有 方法:看右下角的撤退应敌等颜色
+	FindMultiColor 650,623,1225,705, "1712CA", "100|0|F7FBFB,300|0|0E3B6A,300|-20|1072D6", 1, 0.9, intX, intY
+		If intX > -1 And intY > -1 Then 	
+		'GetColor=GetPixelColor(1005,219)'39,277
+ 		'If GetColor = "F7FBF7" Then 'E6EFEF
+ 			offset = Int((500 + 1 + 1) * Rnd() - 1)
+			Delay offset
+ 			Delay 3000
+				count = count + 1
+ 				TracePrint "这关小怪打完啦,耗时 "&时间&" 秒,这是第 "&count&" 只怪"
+ 				TracePrint "[结束Function:出击]"
+ 				Exit Function
+ 		Else 
+ 			Goto 出击start
+ 		End If
+End Function
+
+
+Function 维修()
+TracePrint "[进入Function:维修]"
+	Dim offset
+	Randomize
+	offset = Int((2+2+1) * Rnd() -2)
+	'TracePrint "偏移量为"&offset	
+	Tap 1264+offset,318-offset'点开维修菜单 1264,318
+	offset = Int((500 + 1 + 1) * Rnd() - 1)
+	Delay offset
+	Delay 800
+	Rem 维修工具
+	GetColor = GetPixelColor(581,59)
+	If GetColor = "949694" Then '有维修工具时,工具图标背景颜色更深 3-4是9C968C
+	offset = Int((2+2+1) * Rnd() -2)
+ 	Tap 535+offset, 70-offset'点维修工具
+ 	offset = Int((500 + 1 + 1) * Rnd() - 1)
+	Delay offset
+ 	Delay 150
+ 	TracePrint "使用紧急维修"
+ 	offset = Int((2+2+1) * Rnd() -2)
+ 	Tap 754+offset,463-offset'点击确定使用 754,463
+ 	offset = Int((500 + 1 + 1) * Rnd() - 1)
+	Delay offset
+ 	Delay 200
+ 	GetColor = GetPixelColor(1256,382)'是否使用光维修工具或全员满血
+	If GetColor = "B9B9B9" Then '是
+	offset = Int((2+2+1) * Rnd() -2)
+ 	Tap 926+offset,187-offset'关掉小窗口 926,187
+ 	TracePrint "已使用光维修工具或全员满血,继续攻略boss啦"
+ 	offset = Int((500 + 1 + 1) * Rnd() - 1)
+	Delay offset
+ 	Delay 100
+ 	Else '修复了
+ 	TracePrint"发现仍有剩余维修工具,继续使用"
+ 	offset = Int((500 + 1 + 1) * Rnd() - 1)
+	Delay offset
+ 	Delay 500
+ 	Goto 维修工具
+ 	End If
+ 	Else '走这条说明没有维修工具
+ 	TracePrint "未发现维修工具"
+ 	offset = Int((2+2+1) * Rnd() -2)
+ 	Tap 1075+offset,323-offset'关掉维修菜单
+ 	End If
+
+offset = Int((500+1+1) * Rnd() -1) 	
+Delay 500+offset*100
+TracePrint "[结束Function:维修]"
+End Function
+
+
+
+//以前可以无脑刷boss的代码
+
+//放在scan一开头就好
+//检查boss
+FindMultiColor 266,72,1111,595, "31283A", "-5|-28|524DFF,-6|25|4A4DF7", 1, 0.9, intX, intY'751,78,935,221
+If intX > -1 And intY > -1 Then
+TracePrint "发现boss啦,在F1:"&intX&","&intY
+Goto AttackBoss
+Else 
+	FindMultiColor 648,309,839,493, "31283A", "-5|-28|524DFF,-6|25|4A4DF7", 1, 0.9, intX, intY'315,110,445,202
+	If intX > -1 And intY > -1 Then
+		TracePrint "发现boss啦,在E4:"&intX&","&intY
+		Goto AttackBoss
+	Else
+		FindMultiColor 648,309,839,493, "31283A", "-5|-28|524DFF,-6|25|4A4DF7,-55|-32|292429", 1, 0.9, intX, intY
+		If intX > -1 And intY > -1 Then
+			TracePrint "发现boss啦,在B1:"&intX&","&intY
+			Goto AttackBoss
+		Else 	
+			TracePrint "未检测到boss,继续打小怪"'messageshow
+			Goto 小怪
+		End If
+	End If
+End If
+
+Rem AttackBos1s
+Call 维修()
+走起(intX, intY)
+'判断是否完全打完
+offset = Int((500 + 1 + 1) * Rnd() - 1)
+Delay offset
+Delay 5000
+//FindMultiColor 266,72,1111,595, "4255CE", "0|330|F7FBF7,0|530|E6C2B5,-470|-100|E6E7E6,-200|500|009AEF", 1, 0.7, intX, intY
+GetColor = GetColor(1220,357)
+If GetColor="E1E1E1" Then 
+	Dim t222
+	t222 = Time()
+ 	TracePrint "整个副本打完啦,总耗时"&int((t2-t1)/60)&"分钟"'&(t2-t1)Mod60&"秒"
+ 	Goto 开始
+Else 
+	TracePrint "整个本还未结束,继续打boss"
+	Goto Scan
+End If
+
+Function FindBoss
+	//专门为了4-1的
+	offset = Int((500+1+1) * Rnd() -1) 	
+	Delay 500+offset*100
+	GetColor = GetPixelColor(464,601)
+	If GetColor = "5B4AFF" Then 
+		TracePrint "boss在B6"
+		offset = Int((9+9+1) * Rnd() -9)
+ 		Tap 464+offset,601-offset
+		offset = Int((500+1+1) * Rnd() -1) 	
+		Delay 500+offset*100
+	Else 
+			GetColor = GetPixelColor(529,661)
+			If GetColor = "512C30" Then 
+			TracePrint "boss在C4"
+			offset = Int((9+9+1) * Rnd() -9)
+ 			Tap 608+offset,408-offset
+			offset = Int((500+1+1) * Rnd() -1) 	
+			Delay 500 + offset * 100
+		Else 
+			TracePrint "没检测到boss...?!"
+		End If
+	End If
+End Function
