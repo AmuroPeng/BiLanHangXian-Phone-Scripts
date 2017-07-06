@@ -5,8 +5,8 @@ Dim 几次出现大怪=4
 Dim bossX=845
 Dim bossY=150
 Dim 关卡名称="5-1"
-Dim 小怪识别1="44AEC8"
-Dim 小怪识别2="60|0|43DCFE,45|0|49DAFA,23|0|152D33,2|-20|C1F4FF"
+Dim 小怪识别1="43D0EE"
+Dim 小怪识别2="0|-20|BFEFEF,20|0|1B3546,40|0|45DCF2,55|0|40D9FB"
 Dim 小怪识别3 = 1
 
 Rem 开始
@@ -25,38 +25,25 @@ Delay 2000
 Rem 小怪'找小怪
 	offset = Int((1000 + 500 + 1) * Rnd() - 500)
 	Delay offset
-	FindMultiColor 123, 106, 830, 683, 小怪识别1, 小怪识别2, 小怪识别3, 0.8, intX, intY
-//---只有5.1---需要把地图分块---其他图删掉就好--------------------------
-		If intX = -1 And intY = -1 Then
-		FindMultiColor 783,177,1225,466, 小怪识别1, 小怪识别2, 小怪识别3, 0.8, intX, intY
- 		End If
-//---只有5.1---需要把地图分块---其他图删掉就好--------------------------		
-	If intX > -1 And intY > -1 Then 
-		TracePrint "发现有小怪,在" & intX & ", " & intY
-		offset = Int((500 + 1 + 1) * Rnd() - 1)
-		Delay offset
-		Delay 500
-		走起 intX, intY
-		offset = Int((500+5+1) * Rnd() -5)
-		Delay 1000+offset
 //---有没有必要-补充弹药---------------------------------------------
-			If count = 3 Then 
-				While GetColor = "F5F5F5"
-					offset = Int((5 + 5 + 1) * Rnd() - 5)
-					Tap 864 + offset, 594 - offset
-					GetColor=GetPixelColor(879,377)'检测规避的白色
-					If GetColor = "FFFFFF" Then 
-						TracePrint "遭遇伏击正在规避QAQ"
-						offset = Int((5+5+1) * Rnd() -5)
-						Tap 879+offset, 377-offset
-					End If
-					GetColor = GetPixelColor(1006, 634)
-					If GetColor = "EEFCFF" Then 
-						Call 出击()
-					End If
-					GetColor = GetPixelColor(889, 584)
-				Wend
+	If count = 3 Then 
+		TracePrint "去吃弹药补给"
+		While GetColor <> "F5F5F5"
+			offset = Int((5 + 5 + 1) * Rnd() - 5)
+			Tap 864 + offset, 594 - offset
+			GetColor=GetPixelColor(879,377)'检测规避的白色
+			If GetColor = "FFFFFF" Then 
+				TracePrint "遭遇伏击正在规避QAQ"
+				offset = Int((5+5+1) * Rnd() -5)
+				Tap 879+offset, 377-offset
 			End If
+			GetColor = GetPixelColor(1006, 634)
+			If GetColor = "EEFCFF" Then 
+				Call 出击()
+			End If
+			GetColor = GetPixelColor(889, 584)
+		Wend
+	End If
 //---有没有必要-补充弹药---------------------------------------------
 
 //---有没有必要-维修---------------------------------------------
@@ -75,6 +62,21 @@ Rem 小怪'找小怪
 		offset = Int((500 + 1 + 1) * Rnd() - 1)
 		Delay offset	
 		Delay 3500
+	FindMultiColor 123, 106, 830, 683, 小怪识别1, 小怪识别2, 小怪识别3, 0.8, intX, intY
+//---只有5.1---需要把地图分块---其他图删掉就好--------------------------
+		If intX = -1 And intY = -1 Then
+		FindMultiColor 783,177,1225,466, 小怪识别1, 小怪识别2, 小怪识别3, 0.8, intX, intY
+ 		End If
+//---只有5.1---需要把地图分块---其他图删掉就好--------------------------		
+	If intX > -1 And intY > -1 Then 
+		TracePrint "发现有小怪,在" & intX & ", " & intY
+		offset = Int((500 + 1 + 1) * Rnd() - 1)
+		Delay offset
+		Delay 500
+		走起 (intX, intY)
+		offset = Int((500+5+1) * Rnd() -5)
+		Delay 1000+offset
+
 		Goto 小怪
 	Else 
 		TracePrint "没发现有怪,手动点"
@@ -152,7 +154,7 @@ End Function
 
 Function 走起(intX,intY)
 	TracePrint "[进入Function:走起]"
-	While GetColor <> "EEFCFF"
+	While GetColor <> "DFDD9E"
 		GetColor=GetPixelColor(879,377)'检测规避的白色
 		If GetColor = "FFFFFF" Then 
 			TracePrint "遭遇伏击正在规避QAQ"
@@ -164,7 +166,7 @@ Function 走起(intX,intY)
 		offset = Int((5+5+1) * Rnd() -5)
 		Tap intX + offset, intY - offset
 		TracePrint "正在点 "&intX&","&intY
-		GetColor=GetPixelColor(1006,634)'检测出击的绿色,为的是while检测
+		GetColor = GetPixelColor(929, 648)'检测出击的绿色,为的是while检测
 		offset = Int((500 + 1 + 1) * Rnd() - 1)
 		Delay offset
 		Delay 3000
@@ -178,7 +180,7 @@ TracePrint "[进入Function:出击]"
 Dim 时间
 时间 = 0
 Rem 出击start
-	While GetColor <> "DFDD9E"'点出击
+	While GetColor = "DFDD9E"'点出击
 		GetColor = GetPixelColor(929, 648)
 		TracePrint "点击出击"
 		offset = Int((5 + 5 + 1) * Rnd() - 5)
@@ -212,7 +214,7 @@ Rem 出击start
  			Tap 1098+offset,635-offset
 			offset = Int((500 + 1 + 1) * Rnd() - 1)
 			Delay offset
-			Delay 500
+			Delay 800
 			TracePrint "等待出击结束"
  		End If
 	Wend
