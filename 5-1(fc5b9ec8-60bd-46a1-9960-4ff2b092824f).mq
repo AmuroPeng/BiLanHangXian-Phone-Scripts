@@ -27,15 +27,18 @@ Rem 小怪'找小怪
 	Delay offset
 //---有没有必要-补充弹药---------------------------------------------
 	If count = 3 Then 
-		TracePrint "去吃弹药补给"
-		While GetColor <> "F5F5F5"
+	GetColor = GetPixelColor(889, 584)
+		While GetColor = "F5F5F5"'本来有弹药时是F5F5F5
+			TracePrint "去吃弹药补给"
 			offset = Int((5 + 5 + 1) * Rnd() - 5)
 			Tap 864 + offset, 594 - offset
 			GetColor=GetPixelColor(879,377)'检测规避的白色
 			If GetColor = "FFFFFF" Then 
 				TracePrint "遭遇伏击正在规避QAQ"
 				offset = Int((5+5+1) * Rnd() -5)
-				Tap 879+offset, 377-offset
+				Tap 879 + offset, 377 - offset
+				offset = Int((500 + 1 + 1) * Rnd() - 1)
+				Delay 1000+offset
 			End If
 			GetColor = GetPixelColor(1006, 634)
 			If GetColor = "EEFCFF" Then 
@@ -62,7 +65,7 @@ Rem 小怪'找小怪
 		offset = Int((500 + 1 + 1) * Rnd() - 1)
 		Delay offset	
 		Delay 3500
-	FindMultiColor 123, 106, 830, 683, 小怪识别1, 小怪识别2, 小怪识别3, 0.8, intX, intY
+	FindMultiColor 114,79,852,710, 小怪识别1, 小怪识别2, 小怪识别3, 0.8, intX, intY
 //---只有5.1---需要把地图分块---其他图删掉就好--------------------------
 		If intX = -1 And intY = -1 Then
 		FindMultiColor 783,177,1225,466, 小怪识别1, 小怪识别2, 小怪识别3, 0.8, intX, intY
@@ -166,10 +169,10 @@ Function 走起(intX,intY)
 		offset = Int((5+5+1) * Rnd() -5)
 		Tap intX + offset, intY - offset
 		TracePrint "正在点 "&intX&","&intY
-		GetColor = GetPixelColor(929, 648)'检测出击的绿色,为的是while检测
 		offset = Int((500 + 1 + 1) * Rnd() - 1)
 		Delay offset
 		Delay 3000
+		GetColor = GetPixelColor(929, 648)'检测出击的绿色,为的是while检测
 	Wend
 		出击()
 		TracePrint "[结束Function:走起]"
@@ -182,6 +185,8 @@ Dim 时间
 Rem 出击start
 	While GetColor = "DFDD9E"'点出击
 		GetColor = GetPixelColor(929, 648)
+		offset = Int((500 + 1 + 1) * Rnd() - 1)
+		Delay 500 = offset
 		TracePrint "点击出击"
 		offset = Int((5 + 5 + 1) * Rnd() - 5)
  		Tap 1098+offset,635-offset
@@ -189,7 +194,12 @@ Rem 出击start
 		Delay offset
 		Delay 500
 	Wend
+	TracePrint "等待小怪全部死光光"
 	While GetColor <> "3FD75D"
+		GetColor = GetPixelColor(929, 648)
+		If GetColor = "DFDD9E" Then '有时候卡,点完出击没反应,这里检测一下是否真的点完了
+			Goto 出击start
+		End If
 		GetColor = GetPixelColor(253,479)
 		offset = Int((500 + 1 + 1) * Rnd() - 1)
 		Delay offset
@@ -272,14 +282,14 @@ TracePrint "[结束Function:维修]"
 End Function
 
 Function FindBoss
-	//专门为了4-1的
+	//专门为了5-1的
 	offset = Int((500+1+1) * Rnd() -1) 	
 	Delay 500+offset*100
 	GetColor = GetPixelColor(305,147)
 	If GetColor <> "DFAD2E" Then 
 		TracePrint "boss在A1"
-		bossX = 464
-		bossY = 601	
+		bossX = 273
+		bossY = 150	
 	Else 
 		GetColor = GetPixelColor(163,630)
 		If GetColor <> "D39425" Then 
