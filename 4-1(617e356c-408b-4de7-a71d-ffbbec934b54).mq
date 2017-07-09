@@ -56,7 +56,7 @@ Rem 小怪
 		Goto 小怪
 	Else 
 		TracePrint "没发现有怪,手动点"
-		While GetColor <> "EEFCFF"or"E5F2F5"
+		While GetColor <> "EEFCFF"
 			GetColor = GetPixelColor(1006, 634)
 		Wend
 		Call 出击()
