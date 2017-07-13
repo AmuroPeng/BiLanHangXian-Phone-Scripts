@@ -27,7 +27,7 @@ Rem 小怪'找小怪
 	Delay offset
 //---有没有必要-补充弹药---------------------------------------------
 	If count = 3 Then 
-	GetColor = GetPixelColor(889, 584)
+	GetColor = GetPixelColor(888,581)
 		While GetColor = "F5F5F5"'本来有弹药时是F5F5F5
 			TracePrint "去吃弹药补给"
 			offset = Int((5 + 5 + 1) * Rnd() - 5)
