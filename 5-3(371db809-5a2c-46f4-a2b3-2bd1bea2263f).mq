@@ -206,11 +206,24 @@ Rem 出击start
 		If GetColor = "DFDD9E" Then '有时候卡,点完出击没反应,这里检测一下是否真的点完了
 			Goto 出击start
 		End If
-		GetColor = GetPixelColor(253,479)
 		offset = Int((500 + 1 + 1) * Rnd() - 1)
 		Delay offset
 		Delay 500
-		时间 = 时间 + 0.5 + offset*0.001
+		时间 = 时间 + 0.5 + offset * 0.001
+		If 时间 > 20 Then 
+			GetColor = GetPixelColor(152, 595)
+			If GetColor = "FFFFFF" Then
+ 				offset = Int((5 + 5 + 1) * Rnd() - 5)
+ 				Tap 122 + offset, 55 - offset
+ 				TracePrint "点击自律"
+ 				GetColor = GetPixelColor(569, 508)
+ 				If GetColor = "45D3FB" Then 
+ 					 offset = Int((5 + 5 + 1) * Rnd() - 5)
+ 					Tap 579 + offset, 508 - offset'关闭提示自律小窗口
+ 				End If
+			End If
+		End If
+		GetColor = GetPixelColor(253,479)
 	Wend
 	intX = -1
 	intY = -1
