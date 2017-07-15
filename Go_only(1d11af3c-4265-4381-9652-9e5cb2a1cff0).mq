@@ -23,11 +23,19 @@ Rem 出击start
 	Wend
 	TracePrint "等待小怪全部死光光"
 	While GetColor <> "3FD75D"
-		GetColor = GetPixelColor(253,479)
 		offset = Int((500 + 1 + 1) * Rnd() - 1)
 		Delay offset
 		Delay 500
-		时间 = 时间 + 0.5 + offset*0.001
+		时间 = 时间 + 0.5 + offset * 0.001
+		If 时间 > 20 Then 
+			GetColor = GetPixelColor(152, 595)
+			If GetColor = "FFFFFF" Then
+ 				offset = Int((5 + 5 + 1) * Rnd() - 5)
+ 				Tap 122 + offset, 55 - offset
+ 				TracePrint "点击自律"
+			End If
+		End If
+		GetColor = GetPixelColor(253,479)
 	Wend
 	intX = -1
 	intY = -1
